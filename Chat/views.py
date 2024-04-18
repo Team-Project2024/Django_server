@@ -1,6 +1,8 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Member
+from .models import UserChat
+from .models import ChatBot
 
 import json
 
@@ -22,9 +24,25 @@ def index(request):
         return JsonResponse(response_data)
 
 @csrf_exempt
-def get(request):
+def getMember(request):
     if request.method == 'GET':
         members = Member.objects.all()
         # QuerySet을 JSON 형태로 변환하여 반환
         data = list(members.values())
+        return JsonResponse(data, safe=False)
+    
+@csrf_exempt
+def getChatUser(request):
+    if request.method == 'GET':
+        userchats = UserChat.objects.all()
+        # QuerySet을 JSON 형태로 변환하여 반환
+        data = list(userchats.values())
+        return JsonResponse(data, safe=False)
+    
+@csrf_exempt
+def getChatBot(request):
+    if request.method == 'GET':
+        chatbots = ChatBot.objects.all()
+        # QuerySet을 JSON 형태로 변환하여 반환
+        data = list(chatbots.values())
         return JsonResponse(data, safe=False)
