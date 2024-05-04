@@ -110,7 +110,7 @@ class Lecture(models.Model):
     grade_method = models.CharField(max_length=20)
     test_method = models.CharField(max_length=20)
     ai_sw = models.BooleanField()
-    course_evaluation = models.CharField(max_length=10)
+    course_evaluation = models.IntegerField()
     member_id = models.ForeignKey(Member, on_delete=models.CASCADE, db_column='member_id')
 
     class Meta:
