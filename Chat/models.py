@@ -132,7 +132,7 @@ class SchoolEvent(models.Model):
     event_name = models.CharField(max_length=30)
     event_period = models.CharField(max_length=50)
     description = models.CharField(max_length=255)
-    is_cancled = models.BooleanField()
+    is_canceled = models.BooleanField()
     modified = models.BooleanField()
 
     class Meta:
