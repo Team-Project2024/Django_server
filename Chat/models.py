@@ -19,6 +19,7 @@ class GraduationRequirements(models.Model):
     character_culture = models.IntegerField()
     basic_liberal_arts = models.IntegerField()
     general_liberal_arts = models.IntegerField()
+    msc = models.IntegerField()
     major_common = models.IntegerField()
     major_advanced = models.IntegerField()
     free_choice = models.IntegerField()
