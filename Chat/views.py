@@ -13,23 +13,6 @@ from .models import ChatRoom
 
 import json
 
-# 최종적으로는 스프링으로부터 학번, 엔티티를 받아서
-# 추천에 대한 값을 받아서 반환해줘야됨
-# 이건 메소드에서 전달해주는거 그대로 전달해주면 됨
-
-@csrf_exempt
-def index(request):
-    if request.method == 'POST':
-        # 전송된 JSON 데이터 파싱
-        data = json.loads(request.body.decode('utf-8'))
-        
-        # 'content' 키로부터 값을 가져옴
-        content = data.get('content')
-
-        # 가져온 값을 JSON 응답으로 반환
-        response_data = {'result': content}
-        return JsonResponse(response_data)
-
 @csrf_exempt
 def getMember(request):
     if request.method == 'GET':
@@ -111,3 +94,52 @@ def getChatRoom(request):
         data = list(room.values())
         return JsonResponse(data, safe=False)
     
+    
+# 챗봇 엔드포인트    
+@csrf_exempt
+def queryRecommend(request):
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+    
+        # 'content' 키로부터 값을 가져옴
+        memberId = data.get('memberId')
+        classification = data.get('classification')
+        teamPlay = data.get('teamPlay')
+        credit = data.get('credit')
+        classMethod = data.get('classMethod')
+        testType = data.get('testType')
+
+        # 가져온 값을 JSON 응답으로 반환
+        response_data = {'memberId': memberId}
+        return JsonResponse(response_data)
+    
+@csrf_exempt
+def historyRecommend(request):
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        print(data)
+
+        # 가져온 값을 JSON 응답으로 반환
+        response_data = {'memberId': data}
+        return JsonResponse(response_data)
+    
+@csrf_exempt
+def graduationCheck(request):
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        print(data)
+
+        # 가져온 값을 JSON 응답으로 반환
+        response_data = {'memberId': data}
+        return JsonResponse(response_data)
+    
+@csrf_exempt
+def univEvent(request):
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        memberId = data.get('memberId')
+        month = data.get('month')
+
+        # 가져온 값을 JSON 응답으로 반환
+        response_data = {'memberId': memberId}
+        return JsonResponse(response_data)

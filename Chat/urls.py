@@ -14,4 +14,9 @@ urlpatterns = [
     path('course_details/',views.getCourseDetails), # DB course_details 테이블 GET 테스트
     path('school_event/',views.getSchoolEvent), # DB school_event 테이블 GET 테스트
     path('chat-room/',views.getChatRoom), # DB room 테이블 GET 테스트
+    
+    path('chat/course/query-recommend/',views.queryRecommend), # 질문 기반 과목 추천
+    path('chat/course/history-recommend/',views.historyRecommend), # 수강 기록 기반 과목 추천
+    path('chat/course/graduation-check/',views.graduationCheck), # 졸업요건 조회
+    path('chat/univ-event/',views.univEvent), # 교내 행사 조회
 ]

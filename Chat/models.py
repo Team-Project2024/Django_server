@@ -57,6 +57,8 @@ class ConfirmCompletion(models.Model):
     major_advanced = models.IntegerField()
     free_choice = models.IntegerField()
     graduation_credits = models.IntegerField()
+    volunteer = models.IntegerField()
+    chapel = models.IntegerField()
     member_id = models.ForeignKey(Member, on_delete=models.CASCADE, db_column='member_id')
 
     class Meta:
@@ -101,6 +103,7 @@ class Lecture(models.Model):
     division = models.IntegerField()
     grade = models.IntegerField()
     lecture_time = models.CharField(max_length=20)
+    ai_sw = models.BooleanField()
     class_method = models.CharField(max_length=20)
     test_type = models.CharField(max_length=30)
     teamwork = models.IntegerField()
@@ -109,8 +112,6 @@ class Lecture(models.Model):
     harnessing_resource = models.IntegerField()
     team_play = models.BooleanField()
     grade_method = models.CharField(max_length=20)
-    test_method = models.CharField(max_length=20)
-    ai_sw = models.BooleanField()
     course_evaluation = models.IntegerField()
     member_id = models.ForeignKey(Member, on_delete=models.CASCADE, db_column='member_id')
 
