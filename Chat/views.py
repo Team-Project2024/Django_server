@@ -133,8 +133,7 @@ def historyRecommend(request):
     if request.method == 'POST':
         # 요청에서 JSON 데이터 로드
         data = json.loads(request.body.decode('utf-8'))
-        member_id = data.get('memberId')
-        
+        member_id = data
         # 회원의 TECH 현황 가져오기
         member = Member.objects.get(id=member_id)
         current_tech = {
@@ -235,7 +234,7 @@ def graduationCheck(request):
     if request.method == 'POST':
         # 요청에서 JSON 데이터 로드
         data = json.loads(request.body.decode('utf-8'))
-        member_id = data.get('memberId')
+        member_id = data
         
         # 회원 정보 조회
         member = Member.objects.get(id=member_id)
