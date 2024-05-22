@@ -89,12 +89,15 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': env('DB_NAME'),
-        'USER' : env('DB_USER'),  # 이 부분을 수정
+        'USER' : env('DB_USER'),
         'PASSWORD' : env('DB_PASSWORD'),
         'HOST' : '127.0.0.1',
         'PORT' : '3306',
     }
 }
+
+print("DB User:", os.getenv('DB_USER'))
+print("DB Password:", os.getenv('DB_PASSWORD'))
 
 
 
