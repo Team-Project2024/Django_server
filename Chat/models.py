@@ -113,6 +113,8 @@ class Lecture(models.Model):
     team_play = models.BooleanField()
     grade_method = models.CharField(max_length=20)
     course_evaluation = models.IntegerField()
+    introduction = models.CharField(max_length=255)
+    grade_ratio = models.CharField(max_length=255)
     member_id = models.ForeignKey(Member, on_delete=models.CASCADE, db_column='member_id')
 
     class Meta:
@@ -140,3 +142,13 @@ class SchoolEvent(models.Model):
     class Meta:
         db_table = 'school_event'
         app_label = 'school_event'
+        
+class Lecture_detail(models.Model):
+    id = models.AutoField(primary_key=True)
+    week = models.IntegerField()
+    content = models.CharField(max_length=255)
+    lecture_id = models.ForeignKey(Lecture, on_delete=models.CASCADE, db_column='lecture_id')
+
+    class Meta:
+        db_table = 'lecture_detail'
+        app_label = 'lecture_detail'

@@ -235,17 +235,13 @@ def graduationCheck(request):
         # 요청에서 JSON 데이터 로드
         data = json.loads(request.body.decode('utf-8'))
         member_id = data
-        
         # 회원 정보 조회
         member = Member.objects.get(id=member_id)
         major_id = member.major_id
-        
         # 졸업 요건 조회
         graduation_requirements = GraduationRequirements.objects.get(major_id=major_id)
-        
         # 이수 현황 조회
         completion = ConfirmCompletion.objects.get(member_id=member_id)
-        
         # 초과 학점 계산
         excess_general_culture = max(0, completion.general_liberal_arts - graduation_requirements.general_liberal_arts)
         excess_major_common = max(0, completion.major_common - graduation_requirements.major_common)
@@ -253,7 +249,6 @@ def graduationCheck(request):
         
         # 자유선택 학점으로 초과 학점 이동
         free_choice_with_excess = completion.free_choice + excess_general_culture + excess_major_common + excess_major_advanced
-        
         # 부족한 학점 계산
         remaining_humanities = max(0, graduation_requirements.character_culture - completion.character_culture)
         remaining_basics = max(0, graduation_requirements.basic_liberal_arts - completion.basic_liberal_arts)
@@ -283,14 +278,13 @@ def graduationCheck(request):
 
         # 결과 데이터를 문자열로 변환
         content_string = ', '.join([f"{key}: {value}" for key, value in data.items()])
-        
         # 최종 결과
         result = {
             "content": content_string,
             "table": "",
             "data": []
         }
-        
+        print(result)
         
         return JsonResponse(result, safe=False)
 
