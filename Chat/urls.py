@@ -7,4 +7,5 @@ urlpatterns = [
     path('chat/course/query-recommend/',views.queryRecommend), # 질문 기반 과목 추천
     path('chat/course/history-recommend/',views.historyRecommend), # 수강 기록 기반 과목 추천
     path('chat/course/graduation-check/',views.graduationCheck), # 졸업요건 조회
+    path('chat/hoseo/location/',views.hoseoLocation), # 졸업요건 조회
 ]

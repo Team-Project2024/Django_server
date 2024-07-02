@@ -291,3 +291,20 @@ def graduationCheck(request):
         return JsonResponse(result, safe=False)
 
 
+@csrf_exempt
+def hoseoLocation(request):
+    if request.method == 'POST':
+        # 요청에서 JSON 데이터 로드
+        data = json.loads(request.body.decode('utf-8'))
+        member_id = data
+        
+        result = {
+            # 사용자에게 보여줄 답변을 작성하십시오~~
+            "content": member_id,
+            "table": "school_location",
+            # 데이터 부분에 넘겨주면 장소 데이터들 넘겨주면 됨
+            "data": []
+        }
+        print(result)
+        
+        return JsonResponse(result, safe=False)
