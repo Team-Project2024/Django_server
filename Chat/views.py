@@ -237,9 +237,11 @@ def graduationCheck(request):
         member_id = data
         # 회원 정보 조회
         member = Member.objects.get(id=member_id)
-        major_id = member.major_id
+        major_id = member.major_id  # major_id는 Major 객체를 참조함
+        # major_id의 앞 4자리를 year 변수에 저장합니다.
+        year = int(str(member_id)[:4])
         # 졸업 요건 조회
-        graduation_requirements = GraduationRequirements.objects.get(major_id=major_id)
+        graduation_requirements = GraduationRequirements.objects.filter(major_id=major_id, year=year).get()
         # 이수 현황 조회
         completion = ConfirmCompletion.objects.get(member_id=member_id)
         # 초과 학점 계산

@@ -131,17 +131,16 @@ class CourseDetails(models.Model):
         db_table = 'course_details'
         app_label = 'course_details'
 
-class SchoolEvent(models.Model):
+class SchoolLocation(models.Model):
     id = models.AutoField(primary_key=True)
-    event_name = models.CharField(max_length=30)
-    event_period = models.CharField(max_length=50)
-    description = models.CharField(max_length=255)
-    is_canceled = models.BooleanField()
-    modified = models.BooleanField()
+    category = models.CharField(max_length=30)
+    location_name = models.CharField(max_length=50)
+    lat = models.CharField(max_length=255)
+    lon = models.CharField(max_length=255)
 
     class Meta:
-        db_table = 'school_event'
-        app_label = 'school_event'
+        db_table = 'school_location'
+        app_label = 'school_location'
         
 class Lecture_detail(models.Model):
     id = models.AutoField(primary_key=True)
