@@ -296,14 +296,16 @@ def hoseoLocation(request):
     if request.method == 'POST':
         # 요청에서 JSON 데이터 로드
         data = json.loads(request.body.decode('utf-8'))
-        member_id = data
+        print(data.get('uniInfoPlace'))
+        print(data.get('dormitory'))
+        print(data.get('lectureRoom'))
+        print(data.get('facilities'))
+        print(data.get('eatPlace'))
         
         result = {
-            # 사용자에게 보여줄 답변을 작성하십시오~~
-            "content": member_id,
+            "content": "잘 나옴",
             "table": "school_location",
-            # 데이터 부분에 넘겨주면 장소 데이터들 넘겨주면 됨
-            "data": []
+            "data": [1,2]
         }
         print(result)
         
