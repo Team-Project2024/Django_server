@@ -303,9 +303,11 @@ def hoseoLocation(request):
         print(data.get('eatPlace'))
         
         result = {
-            "content": "잘 나옴",
-            "table": "school_location",
-            "data": [1,2]
+            "content": "잘 나옴", 
+            #여기에 위에 있는 5개중에 빈값이 아닌거를 사용하면 될듯?
+            # EX) eatPlace가 null이 아니고 금룡이라면 eatPlace + "의 위치입니다" 이런식으로
+            "table": "school_location", #이건 고정
+            "data": [1,2] #찾은 데이터 ID 넣으면 됨
         }
         print(result)
         
