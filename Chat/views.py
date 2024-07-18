@@ -12,6 +12,7 @@ from .models import ConfirmCompletion
 from .models import Lecture
 from .models import CourseDetails
 from .models import ChatRoom
+from .models import SchoolLocation
 
 logger = logging.getLogger(__name__)
 
@@ -291,24 +292,91 @@ def graduationCheck(request):
         return JsonResponse(result, safe=False)
 
 
+"""
+호서 위치 조회 기능:
+
+이 기능은 사용자가 POST 요청을 통해 제공한 장소 정보를 기반으로 호서대학교 내 해당 장소의 위치를 조회하는 기능이다.
+요청은 JSON 형식으로 이루어지며, 사용자는 다음과 같은 장소 정보를 제공할 수 있다:
+- uniInfoPlace: 대학교내 시설
+- dormitory: 기숙사
+- lectureRoom: 강의실 건물
+- facilities: 그외 시설
+- eatPlace: 식당
+
+1. 요청 데이터 처리:
+   사용자가 POST 요청을 통해 제공한 JSON 데이터를 수신하고, 이를 파싱하여 개별 장소 정보를 추출한다.
+
+2. Q 객체를 이용한 동적 필터링:
+   Django의 Q 객체를 사용하여 여러 장소 정보를 동적으로 결합한다.
+   Q 객체는 AND 및 OR 연산자를 사용하여 복잡한 쿼리 논리를 구성할 수 있도록 도와준다.
+   각 장소 정보가 제공된 경우에만 해당 조건을 Q 객체에 추가하여 필터링한다.
+
+3. 데이터베이스 조회:
+   구성된 Q 객체를 사용하여 SchoolLocation 모델에서 조건에 맞는 장소들을 조회한다.
+   조회된 장소들의 기본키(id)만 추출하여 리스트 형태로 변환한다.
+
+4. 결과 데이터 구성:
+   입력된 장소 정보에 따라 응답 메시지(content)를 생성한다.
+   여러 장소 정보가 제공된 경우, 해당 장소들의 위치 정보를 리스트 형태로 반환하고,
+   그 외의 경우, 위치 정보를 찾을 수 없다는 메시지를 반환한다.
+   최종적으로 JSON 형식의 응답 데이터를 생성한다.
+   이 응답 데이터는 'content' (응답 메시지), 'table' (조회된 테이블 이름), 'data' (조회된 장소들의 id 리스트)로 구성된다.
+
+5. JSON 응답 반환:
+   최종적으로 생성된 JSON 데이터를 반환하여, 사용자가 요청한 장소 정보에 대한 위치 결과를 받을 수 있도록 한다.
+
+이 메소드는 사용자의 장소 정보를 기반으로 데이터베이스에서 적절한 위치를 동적으로 필터링하고,
+그 결과를 JSON 형식으로 반환하여 다른 서비스와의 연동을 원활하게 한다.
+"""
+
 @csrf_exempt
 def hoseoLocation(request):
     if request.method == 'POST':
-        # 요청에서 JSON 데이터 로드
         data = json.loads(request.body.decode('utf-8'))
-        print(data.get('uniInfoPlace'))
-        print(data.get('dormitory'))
-        print(data.get('lectureRoom'))
-        print(data.get('facilities'))
-        print(data.get('eatPlace'))
-        
+
+        # 데이터 출력
+        uni_info_place = data.get('uniInfoPlace')
+        dormitory = data.get('dormitory')
+        lecture_room = data.get('lectureRoom')
+        facilities = data.get('facilities')
+        eat_place = data.get('eatPlace')
+
+        # 조건 설정
+        query = Q()
+        if uni_info_place:
+            query |= Q(location_name__icontains=uni_info_place)
+        if dormitory:
+            query |= Q(location_name__icontains=dormitory)
+        if lecture_room:
+            query |= Q(location_name__icontains=lecture_room)
+        if facilities:
+            query |= Q(location_name__icontains=facilities)
+        if eat_place:
+            query |= Q(location_name__icontains=eat_place)
+
+        # 조건에 맞는 장소 정보를 조회
+        locations = SchoolLocation.objects.filter(query)
+        location_data = [location.id for location in locations]
+
+        # 입력된 값에 따라 content 생성
+        if uni_info_place:
+            content = f"{uni_info_place}의 위치입니다"
+        elif dormitory:
+            content = f"{dormitory}의 위치입니다"
+        elif lecture_room:
+            content = f"{lecture_room}의 위치입니다"
+        elif facilities:
+            content = f"{facilities}의 위치입니다"
+        elif eat_place:
+            content = f"{eat_place}의 위치입니다"
+        else:
+            content = "위치 정보를 찾을 수 없습니다"
+
+        # 결과 생성
         result = {
-            "content": "잘 나옴", 
-            #여기에 위에 있는 5개중에 빈값이 아닌거를 사용하면 될듯?
-            # EX) eatPlace가 null이 아니고 금룡이라면 eatPlace + "의 위치입니다" 이런식으로
-            "table": "school_location", #이건 고정
-            "data": [1,2] #찾은 데이터 ID 넣으면 됨
+            "content": content,
+            "table": "school_location",
+            "data": location_data
         }
-        print(result)
-        
+
         return JsonResponse(result, safe=False)
