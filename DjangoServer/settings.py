@@ -29,7 +29,14 @@ SECRET_KEY = 'django-insecure-)dvag@v3zcwo)qfk-v_lg#t9kk6ihbj5tzwz70c1i-t4^bkc5=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    'hoseo.store',
+    '172-31-93-203',
+    '127.0.0.1',
+    'django',
+    'gp'
+]
 
 
 # Application definition
@@ -84,15 +91,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Take environment variables from .env file
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': env('DB_NAME'),
-        'USER' : env('DB_USER'),
-        'PASSWORD' : env('DB_PASSWORD'),
-        'HOST' : '127.0.0.1',
-        'PORT' : '3306',
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
     }
 }
 

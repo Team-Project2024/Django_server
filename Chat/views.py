@@ -57,7 +57,8 @@ def queryRecommend(request):
     if request.method == 'POST':
         # JSON 파일에서 데이터 로드
         data = json.loads(request.body.decode('utf-8'))
-        
+        print(data)
+
         query = Q()
         if data.get('classification'):
             query &= Q(classification=data['classification'])
@@ -71,19 +72,21 @@ def queryRecommend(request):
             query &= Q(test_type=data['testType'])
         if 'aiswDegree' in data and data['aiswDegree'] is not None:
             query &= Q(ai_sw=data['aiswDegree'])
-        
+
+        print(query)
         # 데이터베이스에서 조건에 맞는 강의 조회하고 강의평가 점수가 높은 순으로 상위 3개 과목만 필터링
-        top_lectures = Lecture.objects.filter(query).order_by('-course_evaluation')[:3]
+        top_lectures = Lecture.objects.filter(query).exclude(room__icontains='c').exclude(room__icontains='d').order_by('-course_evaluation')[:3]
         # 기본키(id)만 리스트 형태로 추출
+        print(top_lectures)
         response_data = [lecture['id'] for lecture in list(top_lectures.values('id'))]
-        
+        print(response_data)
         # 스프링 서버로 보낼 JSON 데이터 생성
         result = {
             "content": "질문하신 항목에 맞는 과목 리스트입니다.",
             "table": "lecture",
             "data": response_data
         }
-        
+
         return JsonResponse(result, safe=False)
     
 """
@@ -161,6 +164,8 @@ def historyRecommend(request):
         tech_courses = Lecture.objects.annotate(
             total_tech=F('teamwork') + F('entrepreneurship') + F('creative_thinking') + F('harnessing_resource')
         ).filter(total_tech=5)
+
+        tech_courses = tech_courses.exclude(room__icontains='c').exclude(room__icontains='d')
         
         # 가중치 기반 점수 계산
         tech_courses = tech_courses.annotate(
