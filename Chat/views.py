@@ -58,20 +58,34 @@ def queryRecommend(request):
         # JSON 파일에서 데이터 로드
         data = json.loads(request.body.decode('utf-8'))
         print(data)
+       
 
         query = Q()
         if data.get('classification'):
-            query &= Q(classification=data['classification'])
-        if data.get('teamPlay'):
-            query &= Q(team_play=data['teamPlay'])
+            query &= Q(classification=data['classification'])      
         if data.get('credit'):
             query &= Q(credit=data['credit'])
         if data.get('classMethod'):
             query &= Q(class_method=data['classMethod'])
         if data.get('testType'):
             query &= Q(test_type=data['testType'])
-        if 'aiswDegree' in data and data['aiswDegree'] is not None:
-            query &= Q(ai_sw=data['aiswDegree'])
+        if data.get('gradeMethod'):
+            query &= Q(grade_method=data['gradeMethod'])
+
+# DB조회 잘되도록 수정 (aisw, teamPlay) ->>> 24/9/27일자 수정 
+# json파일에서 aisw,teamPlay Boolean으로 오는거 DB schema에 맞게 True면 1로, False면 0으로 변환해서 
+# DB에서 조회되도록 함 (테스트까지 완료)
+
+        if 'aiSw' in data and data['aiSw'] is not None:
+            aisw_value = 1 if data['aiSw'] == True else 0
+            query &= Q(ai_sw=aisw_value)
+
+        if 'teamPlay' in data and data['teamPlay'] is not None:
+            teamPlay_value = 1 if data['teamPlay'] == True else 0       
+            query &= Q(team_play=teamPlay_value)    
+           
+    
+       
 
         print(query)
         # 데이터베이스에서 조건에 맞는 강의 조회하고 강의평가 점수가 높은 순으로 상위 3개 과목만 필터링
@@ -338,6 +352,7 @@ def graduationCheck(request):
 def hoseoLocation(request):
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
+        print(data)
 
         # 데이터 출력
         uni_info_place = data.get('uniInfoPlace')
@@ -383,5 +398,6 @@ def hoseoLocation(request):
             "table": "school_location",
             "data": location_data
         }
+        print(result)
 
         return JsonResponse(result, safe=False)
